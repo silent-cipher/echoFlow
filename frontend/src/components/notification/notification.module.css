@@ -10,6 +10,7 @@
   border-radius: 0.75rem;
   min-width: 300px;
 }
+
 .box {
   display: flex;
   flex-direction: row;
@@ -17,6 +18,7 @@
   gap: 1rem;
   padding: 0.7rem;
 }
+
 .logo {
   background: rgb(68, 70, 84, 0.5);
   height: 22px;
@@ -25,9 +27,11 @@
   place-items: center;
   border-radius: 6px;
 }
+
 .logo > svg {
   color: var(--white-color);
 }
+
 .content {
   display: flex;
   flex-direction: column;
@@ -36,6 +40,7 @@
   gap: 0.3rem;
   max-width: 250px;
 }
+
 .content > h1 {
   padding: 0;
   margin: 0;
@@ -45,6 +50,7 @@
   font-weight: 600;
   text-transform: capitalize;
 }
+
 .content > p {
   padding: 0;
   margin: 0;
@@ -54,20 +60,25 @@
   font-weight: 400;
   word-break: break-all;
 }
+
 .buttons {
   padding: 2px;
 }
+
 .buttons > button {
   all: unset;
   opacity: 0.8;
   cursor: pointer;
 }
+
 .buttons > button > svg {
   color: var(--white-color);
 }
+
 .buttons > button:hover {
   scale: 1.1;
 }
+
 .lowerProgressbar {
   padding: 6px 0px;
   background: var(--white-color);
@@ -75,6 +86,7 @@
   display: block;
   width: auto;
 }
+
 @keyframes toast-in-right {
   from {
     transform: translateX(-100%);

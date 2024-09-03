@@ -1,5 +1,4 @@
 import React from "react";
-import classes from "@/components/error/error.module.css";
 
 interface ErrorComponentProps {
   error: string;
@@ -8,20 +7,11 @@ interface ErrorComponentProps {
 
 const ErrorComponent: React.FC<ErrorComponentProps> = ({ error, reload }) => {
   return (
-    <div className={classes["container"]}>
-      <h2>500 Server Error</h2>
+    <div className="flex flex-col items-center justify-center h-[98vh] w-full">
+      <h2 className="mb-5 text-blue-500 text-2xl">500 Server Error</h2>
       <button
         onClick={reload}
-        style={{
-          all: "unset",
-          padding: "1rem 2rem",
-          color: "var(--white-color)",
-          fontSize: "1.5rem",
-          border: "1px solid var(--white-color)",
-          borderRadius: "0.5rem",
-          backgroundColor: "var(--primary-color)",
-          cursor: "pointer",
-        }}
+        className="px-8 py-4 text-white text-xl border border-white rounded bg-blue-500 cursor-pointer"
       >
         Try again
       </button>
