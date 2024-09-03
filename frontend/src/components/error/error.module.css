@@ -6,6 +6,7 @@
   height: 98vh;
   width: -webkit-fill-available;
 }
+
 .container > h2 {
   margin-bottom: 20px;
   color: var(--primary-color);
