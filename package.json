@@ -1,0 +1,30 @@
+{
+  "name": "stakestream",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "workspaces": {
+    "packages": [
+      "contracts",
+      "frontend",
+      "backend"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm workspace @stakestream/frontend run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^9.7.0",
+    "husky": "^9.1.1"
+  },
+  "dependencies": {
+    "stakestream": "file:"
+  }
+}

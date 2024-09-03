@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "Checking for changes in frontend/src since the last push..."
+if git diff --name-only @{push}...HEAD | grep -q 'frontend/src'; then
+  echo "Changes detected in frontend/src since the last push. Running npm run build to ensure the project builds successfully..."
+  echo "Building project..."
+  cd frontend
+  if npm run build; then
+    echo "Build successful. Proceeding with commit..."
+  else
+    echo "Build failed. Aborting commit..."
+    exit 1
+  fi
+else
+  echo "No changes detected in frontend/src since the last push. Skipping build..."
+fi
