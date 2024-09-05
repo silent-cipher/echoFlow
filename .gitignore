@@ -4,3 +4,5 @@ package-lock.json
 .venv
 .next
 dist
+db.sqlite3
+__pycache__

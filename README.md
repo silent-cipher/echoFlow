@@ -62,8 +62,10 @@ Stake Stream
 
    ```sh
    cd backend
-   npm install
-   npm start
+   virtualenv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   python manage.py runserver
    ```
 
 4. Open your browser and navigate to `http://localhost:3000` for the frontend and `http://localhost:8080` for the backend admin interface.
