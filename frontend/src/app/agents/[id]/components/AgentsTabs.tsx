@@ -55,7 +55,6 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
   useEffect(() => {
     const fetchTweets = async () => {
       if (!agent_id) return;
-      if (tweet_sentiments.length > 0) return;
       const response = await postResponse(
         {
           agent_id,
