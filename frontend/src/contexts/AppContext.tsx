@@ -37,6 +37,13 @@ type AppContextType = {
   tweet_sentiments: each_sentiment[];
   setTweetSentimentsHandler: (new_sentiments: string[]) => void;
   updateTweetSentimentsHandler: (new_sentiment: each_sentiment) => void;
+
+  fakeTweetIPFSID: string;
+  setFakeTweetIPFSIDHandler: (new_fake_tweet_ipfs_id: string) => void;
+  fakeTweetInput: string;
+  setFakeTweetInputHandler: (new_fake_tweet_input: string) => void;
+  fakeTweetChat: string[];
+  fakeTweetChatHandler: (new_fake_tweet_chat: string) => void;
 };
 
 const AppContext = React.createContext<AppContextType>({
@@ -49,6 +56,13 @@ const AppContext = React.createContext<AppContextType>({
   tweet_sentiments: [],
   setTweetSentimentsHandler: () => {},
   updateTweetSentimentsHandler: () => {},
+
+  fakeTweetIPFSID: "",
+  setFakeTweetIPFSIDHandler: () => {},
+  fakeTweetInput: "",
+  setFakeTweetInputHandler: () => {},
+  fakeTweetChat: [],
+  fakeTweetChatHandler: () => {},
 });
 
 type Props = {
@@ -83,6 +97,19 @@ export const AppContextProvider: React.FC<Props> = (props) => {
     setTweetSentiments(updated_sentiments);
   };
 
+  const [fakeTweetIPFSID, setFakeTweetIPFSID] = useState<string>("");
+  const setFakeTweetIPFSIDHandler = (new_fake_tweet_ipfs_id: string) => {
+    setFakeTweetIPFSID(new_fake_tweet_ipfs_id);
+  };
+  const [fakeTweetInput, setFakeTweetInput] = useState<string>("");
+  const setFakeTweetInputHandler = (new_fake_tweet_input: string) => {
+    setFakeTweetInput(new_fake_tweet_input);
+  };
+  const [fakeTweetChat, setFakeTweetChat] = useState<string[]>([]);
+  const fakeTweetChatHandler = (new_fake_tweet_chat: string) => {
+    setFakeTweetChat((prevChat) => [...prevChat, new_fake_tweet_chat]);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -95,6 +122,13 @@ export const AppContextProvider: React.FC<Props> = (props) => {
         tweet_sentiments,
         setTweetSentimentsHandler,
         updateTweetSentimentsHandler,
+
+        fakeTweetIPFSID,
+        setFakeTweetIPFSIDHandler: setFakeTweetIPFSIDHandler,
+        fakeTweetInput,
+        setFakeTweetInputHandler: setFakeTweetInputHandler,
+        fakeTweetChat,
+        fakeTweetChatHandler: fakeTweetChatHandler,
       }}
     >
       {props.children}

@@ -14,6 +14,7 @@ import AppContext from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import usePostResponse from "@/hooks/usePostResponse";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AlertIpfsId } from "./AlertIpfsId";
 
 interface each_tweet {
   tweet_heading: string;
@@ -49,6 +50,12 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     tweet_sentiments,
     setTweetSentimentsHandler,
     updateTweetSentimentsHandler,
+
+    fakeTweetIPFSID,
+    fakeTweetInput,
+    setFakeTweetInputHandler,
+    fakeTweetChat,
+    fakeTweetChatHandler,
   } = useContext(AppContext);
   const { postResponse, loading: postloading } = usePostResponse();
 
@@ -107,13 +114,27 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     updateTweetSentimentsHandler(new_sentiment);
   };
 
-  console.log(tweet_sentiments);
+  const handleFakeTweetDetection = async () => {
+    fakeTweetChatHandler(fakeTweetInput);
+    const response = await postResponse(
+      {
+        tweet: fakeTweetInput,
+        ipfs_id: fakeTweetIPFSID,
+      },
+      "fake_tweet_detection"
+    );
+    fakeTweetChatHandler("Fake Tweet Detection: " + response);
+    setFakeTweetInputHandler("");
+  };
 
   return (
     <Tabs defaultValue="create-tweets" className="w-lvw p-12">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="create-tweets">Create Tweets</TabsTrigger>
         <TabsTrigger value="tweets-sentiments">Tweets sentiments</TabsTrigger>
+        <TabsTrigger value="fake-tweet-detection">
+          Fake Tweets Detection
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="create-tweets">
         <Card>
@@ -251,6 +272,37 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
             ))}
           </CardContent>
           <CardFooter></CardFooter>
+        </Card>
+      </TabsContent>
+      <TabsContent value="fake-tweet-detection">
+        <Card>
+          <CardHeader>
+            <CardTitle>Fake Tweets Detection</CardTitle>
+            <CardDescription>
+              Detect fake tweets created by the agent
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2 h-[60vh] overflow-y-scroll">
+            <AlertIpfsId />
+            {fakeTweetChat.map((chat, index) => (
+              <Card key={index} className="p-4 space-y-4">
+                <p className="text-gray-500">{chat}</p>
+              </Card>
+            ))}
+          </CardContent>
+          <CardFooter>
+            <Input
+              placeholder="Generate tweets for the agent...."
+              value={fakeTweetInput}
+              onChange={(e) => setFakeTweetInputHandler(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleFakeTweetDetection();
+                }
+              }}
+              disabled={fakeTweetIPFSID === ""}
+            />
+          </CardFooter>
         </Card>
       </TabsContent>
     </Tabs>
