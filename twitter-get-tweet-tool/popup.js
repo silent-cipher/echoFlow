@@ -130,7 +130,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const activeTab = await getActiveTabURL();
   if (
     activeTab.url.includes("twitter.com") ||
-    activeTab.url.includes("http://localhost:3000/")
+    activeTab.url.includes("http://localhost:3000/") ||
+    activeTab.url.includes("https://x.com/")
   ) {
     chrome.tabs.sendMessage(
       activeTab.id,
