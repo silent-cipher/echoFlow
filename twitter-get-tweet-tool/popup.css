@@ -5,6 +5,33 @@ body {
   margin: 0;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+.top {
+  background-image: url("/assets/background.png");
+  background-size: cover;
+  background-position: center;
+  height: 70px;
+  display: flex;
+  position: relative;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 45px;
+  left: 20px;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
 .container {
   width: 100%;
   background: linear-gradient(180deg, #fff 0%, #e6e6e6 100%);
@@ -20,21 +47,94 @@ body {
 .tweet-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+  height: 400px;
+  overflow-y: scroll;
+  padding: 0.5rem 0rem;
+  z-index: 10;
 }
 
 .each-tweet {
-  width: 100%;
-  background-color: green;
+  width: -webkit-fill-available;
+  background-color: #fff;
   border-radius: 5px;
+  font-size: 0.8rem;
+  font-family: sans-serif;
+  font-weight: 500;
+  padding: 0rem 0.5rem;
 }
 
-.extract-tweets {
-  width: 100px;
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  position: absolute;
+  bottom: 0;
+  gap: 1rem;
+  background-color: #fff;
+  width: -webkit-fill-available;
+}
+
+.button-container button {
+  width: 90px;
   height: 25px;
-  background-color: #1da1f2;
+  background-color: #1d9bf0;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notif {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  background-color: #fff;
+  color: #1d9bf0;
+  border-radius: 4px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  animation: fadeOutAndTranslate 1s forwards;
+}
+
+@keyframes fadeOutAndTranslate {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.tweet-id {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0rem 0.5rem;
+  background-color: #fff;
+  color: #1d9bf0;
+  width: -webkit-fill-available;
+  text-align: right;
+}
+
+.copy-button {
+  background-color: #1d9bf0;
   border: none;
   cursor: pointer;
   display: flex;

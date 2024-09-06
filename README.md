@@ -42,14 +42,22 @@ Stake Stream
    cd stakeStream
    ```
 
-2. Install dependencies for the frontend (Next.js):
+2. Tnstruction to add chrome extension:
+
+   - Open Chrome browser and navigate to `chrome://extensions/`
+   - Enable Developer mode by toggling the switch in the top right corner.
+   - Click on the `Load unpacked` button in the top left corner.
+   - Navigate to the `extension` folder in the project directory and select it.
+   - The extension should now be installed and visible in the extensions list.
+
+3. Install dependencies for the frontend (Next.js):
 
    ```sh
    cd frontend
    npm install
    ```
 
-3. Run the development servers:
+4. Run the development servers:
 
    - For Next.js (frontend):
 
@@ -68,7 +76,7 @@ Stake Stream
    python manage.py runserver
    ```
 
-4. Open your browser and navigate to `http://localhost:3000` for the frontend and `http://localhost:8080` for the backend admin interface.
+5. Open your browser and navigate to `http://localhost:3000` for the frontend and `http://localhost:8080` for the backend admin interface.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

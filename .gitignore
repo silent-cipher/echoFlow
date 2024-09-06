@@ -6,3 +6,4 @@ package-lock.json
 dist
 db.sqlite3
 __pycache__
+database

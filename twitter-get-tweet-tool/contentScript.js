@@ -27,8 +27,11 @@
 
       let set_of_tweets = new Set(current_tweets);
       for (let i = 0; i < length; i++) {
-        const tweet = document.getElementsByClassName(CLASS_NAME)[i].innerText;
-        set_of_tweets.add(tweet);
+        let tweet = document.getElementsByClassName(CLASS_NAME)[i].innerText;
+        tweet = tweet.replace(/(?:https?|ftp):\/\/[\n\S]+/g, "");
+        if (tweet.split(" ").length > 5) {
+          set_of_tweets.add(tweet);
+        }
       }
       console.log(set_of_tweets);
 
