@@ -27,7 +27,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-row items-start justify-start flex-wrap p-12 gap-8">
+    <main className="flex flex-row items-start justify-start flex-wrap p-12 gap-8">
       <CreateNewAgents />
       {loading ? <LoadingTweetsAgents /> : <AllAgents allAgents={allAgents} />}
     </main>
