@@ -10,8 +10,9 @@ const useGetResponse = () => {
     console.log(path);
     try {
       setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${path}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/twitter_agent/${path}`,
         {
           method: "GET",
           headers: {
