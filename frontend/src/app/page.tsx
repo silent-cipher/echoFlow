@@ -27,9 +27,15 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex flex-row items-start justify-start flex-wrap p-20 gap-8 min-h-screen">
-      <CreateNewAgents />
-      {loading ? <LoadingTweetsAgents /> : <AllAgents allAgents={allAgents} />}
-    </main>
+    <div className="min-h-screen">
+      <main className="flex flex-row items-start justify-start flex-wrap p-20 gap-8">
+        <CreateNewAgents />
+        {loading ? (
+          <LoadingTweetsAgents />
+        ) : (
+          <AllAgents allAgents={allAgents} />
+        )}
+      </main>
+    </div>
   );
 }
