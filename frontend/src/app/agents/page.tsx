@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const AgentPage: React.FC = () => {
   return (
-    <div className="flex items-center justify-center h-[80vh]">
+    <div className="flex items-center justify-center h-[100vh] pt-8">
       <Alert className="w-[70vw] bg-[#1d9bf0]">
         <RocketIcon className="h-6 w-6 " />
         <AlertTitle className="text-white text-2xl pb-4">

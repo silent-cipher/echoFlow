@@ -1,0 +1,120 @@
+.container {
+  padding: 3rem 2.5rem;
+  padding-top: 0;
+  background-color: #242526;
+}
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.bottom {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding: 3rem 1.5rem;
+  padding-bottom: 0rem;
+  width: -webkit-fill-available;
+}
+.bottom_items_box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+.bottom_items_box > h2 {
+  padding: 0;
+  margin: 0;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.bottom_items_box > h2::after {
+  content: "";
+  display: block;
+  width: 110%;
+  height: 0.2rem;
+  background-color: #1d9bf0;
+  margin-top: 0.5rem;
+  border-radius: 0.75rem;
+}
+.bottom_items_box > h2:hover {
+  color: #1d9bf0;
+  cursor: pointer;
+}
+.bottom_items {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+.bottom_item {
+  cursor: pointer;
+  color: #a8a7ab;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.bottom_item:hover {
+  color: #1d9bf0;
+}
+.bottom_footer {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 0rem 0rem 0rem;
+  width: -webkit-fill-available;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.bottom_footer_left {
+  flex: 1 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.bottom_footer_left > p {
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  background-color: #1d9bf0;
+  border: 0.5px solid white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+}
+.bottom_footer_left > p:hover {
+  background-color: white;
+  color: #1d9bf0;
+}
+.bottom_footer_right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.bottom_footer_right svg {
+  color: black;
+}
+
+@media screen and (max-width: 640px) {
+  .bottom_footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .bottom_footer_left > p {
+    font-size: 0.7rem;
+  }
+}

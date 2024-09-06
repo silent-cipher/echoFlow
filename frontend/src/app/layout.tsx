@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/contexts/AppContext";
 import Notifications from "@/components/notification/Notifications";
 import { NotificationContextProvider } from "@/contexts/NotificationContext";
@@ -10,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Eth online hackathon 2024 StakeStream",
   description: "Eth online hackathon 2024 StakeStream",
-  // icons: ["logo.jpg"],
+  icons: ["logo.png"],
 };
 
 export default function RootLayout({
@@ -24,7 +27,11 @@ export default function RootLayout({
         <NotificationContextProvider>
           <AppContextProvider>
             <Notifications />
-            {children}
+            <Providers>
+              <Header />
+              {children}
+            </Providers>
+            <Footer />
           </AppContextProvider>
         </NotificationContextProvider>
       </body>

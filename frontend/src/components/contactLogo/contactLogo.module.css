@@ -1,0 +1,22 @@
+.box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+  cursor: pointer;
+  color: white;
+}
+.box > a > svg {
+  color: wheat;
+  font-size: 1.25rem;
+}
+.box > a > svg:hover {
+  color: #1d9bf0;
+  scale: 1.1;
+}
+@media screen and (max-width: 340px) {
+  .box {
+    gap: 1rem;
+  }
+}
