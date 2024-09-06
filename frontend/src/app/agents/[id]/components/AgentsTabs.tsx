@@ -202,7 +202,7 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
             {tweet_sentiments.map((sentiment: each_sentiment) => (
               <Card key={sentiment.tweet_id} className="p-4 space-y-4">
                 <div className="flex flex-col justify-start items-start space-x-4">
-                  <h2 className="text-xl font-normal">
+                  <h2 className="text-base font-normal">
                     {sentiment.tweet_sentence}
                   </h2>
                 </div>
