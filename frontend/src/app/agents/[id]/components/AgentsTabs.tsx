@@ -9,6 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function AgentsTabs() {
@@ -27,8 +28,13 @@ export function AgentsTabs() {
               once
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2"></CardContent>
-          <CardFooter></CardFooter>
+          <CardContent className="space-y-2 h-[60vh] overflow-y-scroll"></CardContent>
+          <CardFooter>
+            <Textarea
+              rows={1}
+              placeholder="Generate tweets for the agent...."
+            />
+          </CardFooter>
         </Card>
       </TabsContent>
       <TabsContent value="tweets-sentiments">
@@ -39,7 +45,7 @@ export function AgentsTabs() {
               Analyze the sentiments of the tweets created by the agent
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2"></CardContent>
+          <CardContent className="space-y-2 h-[60vh] overflow-y-scroll"></CardContent>
           <CardFooter></CardFooter>
         </Card>
       </TabsContent>
