@@ -10,7 +10,7 @@ const AgentIdPage: React.FC<AgentIdPageProps> = ({ params }) => {
   const { id } = params;
   return (
     <div className="min-h-screen pt-8">
-      <AgentsTabs />
+      <AgentsTabs agent_id={id} />
     </div>
   );
 };

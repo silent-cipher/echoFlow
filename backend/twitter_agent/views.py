@@ -70,7 +70,7 @@ def GenTweet(request):
 def TweetSentiment(request):
     return generate_tweet_sentiment(request)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def all_tweets_by_agent_id(requst):
     agent_id = requst.data['agent_id']
     return get_all_tweets_by_agent_id(agent_id)
