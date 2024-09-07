@@ -7,14 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { AlertIpfsId } from "./AlertIpfsId";
 import { useContext, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import AppContext from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
+import Loading from "@/components/loading/Loading";
 import usePostResponse from "@/hooks/usePostResponse";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertIpfsId } from "./AlertIpfsId";
 
 interface each_tweet {
   tweet_heading: string;
@@ -39,6 +40,15 @@ interface each_sentiment {
   tweet_sentence: string;
 }
 
+interface different_loadings {
+  newTweetLoading: boolean;
+  sentimentLoading: {
+    tweet_id: string;
+    loading: boolean;
+  };
+  fakeTweetLoading: boolean;
+}
+
 export function AgentsTabs({ agent_id }: { agent_id: string }) {
   const {
     newTweetInput,
@@ -56,8 +66,11 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     setFakeTweetInputHandler,
     fakeTweetChat,
     fakeTweetChatHandler,
+
+    different_loadings,
+    setDifferentLoadingsHandler,
   } = useContext(AppContext);
-  const { postResponse, loading: postloading } = usePostResponse();
+  const { postResponse } = usePostResponse();
 
   useEffect(() => {
     const fetchTweets = async () => {
@@ -74,11 +87,17 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
   }, []);
 
   const handlerGenerateNewTweets = async () => {
+    if (newTweetInput === "") return;
+    setDifferentLoadingsHandler({
+      ...different_loadings,
+      newTweetLoading: true,
+    });
     setChatNewTweetsHandler({
       question: newTweetInput,
       id: Math.random().toString(36).substr(2, 9),
       is_ai_generated: false,
     });
+    setNewTweetInput("");
     const response = await postResponse(
       {
         agent_id: agent_id,
@@ -86,7 +105,6 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
       },
       "gen_tweet"
     );
-    setNewTweetInput("");
     console.log(response);
     const new_tweet = {
       ...response,
@@ -94,12 +112,23 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
       id: Math.random().toString(36).substr(2, 9),
     };
     setChatNewTweetsHandler(new_tweet);
+    setDifferentLoadingsHandler({
+      ...different_loadings,
+      newTweetLoading: false,
+    });
   };
 
   const handlegetSentiments = async (
     tweet_sentence: string,
     tweet_id: string
   ) => {
+    setDifferentLoadingsHandler({
+      ...different_loadings,
+      sentimentLoading: {
+        tweet_id: tweet_id,
+        loading: true,
+      },
+    });
     const response = await postResponse(
       {
         tweet: tweet_sentence,
@@ -112,10 +141,22 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
       tweet_sentence,
     };
     updateTweetSentimentsHandler(new_sentiment);
+    setDifferentLoadingsHandler({
+      ...different_loadings,
+      sentimentLoading: {
+        tweet_id: "",
+        loading: false,
+      },
+    });
   };
 
   const handleFakeTweetDetection = async () => {
     fakeTweetChatHandler(fakeTweetInput);
+    setDifferentLoadingsHandler({
+      ...different_loadings,
+      fakeTweetLoading: true,
+    });
+    setFakeTweetInputHandler("");
     const response = await postResponse(
       {
         tweet: fakeTweetInput,
@@ -124,7 +165,10 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
       "fake_tweet_detection"
     );
     fakeTweetChatHandler("Fake Tweet Detection: " + response);
-    setFakeTweetInputHandler("");
+    setDifferentLoadingsHandler({
+      ...different_loadings,
+      fakeTweetLoading: false,
+    });
   };
 
   return (
@@ -201,7 +245,7 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
               </Card>
             ))}
           </CardContent>
-          <CardFooter>
+          <CardFooter className="relative">
             <Input
               placeholder="Generate tweets for the agent...."
               value={newTweetInput}
@@ -212,6 +256,16 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
                 }
               }}
             />
+            <div className="absolute right-12 top-2.5">
+              {different_loadings.newTweetLoading && (
+                <Loading
+                  height="12px"
+                  size="10px"
+                  width="40px"
+                  alignItems="center"
+                />
+              )}
+            </div>
           </CardFooter>
         </Card>
       </TabsContent>
@@ -272,9 +326,26 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
                           sentiment.tweet_id
                         )
                       }
-                      variant="destructive"
+                      variant={
+                        different_loadings.sentimentLoading.tweet_id ==
+                          sentiment.tweet_id &&
+                        different_loadings.sentimentLoading.loading
+                          ? "outline"
+                          : "destructive"
+                      }
                     >
-                      Get Sentiments
+                      {different_loadings.sentimentLoading.tweet_id ==
+                        sentiment.tweet_id &&
+                      different_loadings.sentimentLoading.loading ? (
+                        <Loading
+                          height="12px"
+                          size="10px"
+                          width="40px"
+                          alignItems="center"
+                        />
+                      ) : (
+                        "Get Sentiments"
+                      )}
                     </Button>
                   </div>
                 )}
@@ -305,7 +376,7 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
               </Card>
             ))}
           </CardContent>
-          <CardFooter>
+          <CardFooter className="relative">
             <Input
               placeholder="Generate tweets for the agent...."
               value={fakeTweetInput}
@@ -317,6 +388,16 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
               }}
               disabled={fakeTweetIPFSID === ""}
             />
+            <div className="absolute right-12 top-2.5">
+              {different_loadings.fakeTweetLoading && (
+                <Loading
+                  height="12px"
+                  size="10px"
+                  width="40px"
+                  alignItems="center"
+                />
+              )}
+            </div>
           </CardFooter>
         </Card>
       </TabsContent>

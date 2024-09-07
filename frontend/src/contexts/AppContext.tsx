@@ -27,6 +27,15 @@ interface each_sentiment {
   tweet_sentence: string;
 }
 
+interface different_loadings {
+  newTweetLoading: boolean;
+  sentimentLoading: {
+    tweet_id: string;
+    loading: boolean;
+  };
+  fakeTweetLoading: boolean;
+}
+
 type AppContextType = {
   newTweetInput: string;
   setNewTweetInput: (new_tweet_input: string) => void;
@@ -44,6 +53,9 @@ type AppContextType = {
   setFakeTweetInputHandler: (new_fake_tweet_input: string) => void;
   fakeTweetChat: string[];
   fakeTweetChatHandler: (new_fake_tweet_chat: string) => void;
+
+  different_loadings: different_loadings;
+  setDifferentLoadingsHandler: (new_loadings: different_loadings) => void;
 };
 
 const AppContext = React.createContext<AppContextType>({
@@ -63,6 +75,16 @@ const AppContext = React.createContext<AppContextType>({
   setFakeTweetInputHandler: () => {},
   fakeTweetChat: [],
   fakeTweetChatHandler: () => {},
+
+  different_loadings: {
+    newTweetLoading: false,
+    sentimentLoading: {
+      tweet_id: "",
+      loading: false,
+    },
+    fakeTweetLoading: false,
+  },
+  setDifferentLoadingsHandler: () => {},
 });
 
 type Props = {
@@ -110,6 +132,19 @@ export const AppContextProvider: React.FC<Props> = (props) => {
     setFakeTweetChat((prevChat) => [...prevChat, new_fake_tweet_chat]);
   };
 
+  const [different_loadings, setDifferentLoadings] =
+    useState<different_loadings>({
+      newTweetLoading: false,
+      sentimentLoading: {
+        tweet_id: "",
+        loading: false,
+      },
+      fakeTweetLoading: false,
+    });
+  const setDifferentLoadingsHandler = (new_loading: different_loadings) => {
+    setDifferentLoadings(new_loading);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -129,6 +164,9 @@ export const AppContextProvider: React.FC<Props> = (props) => {
         setFakeTweetInputHandler: setFakeTweetInputHandler,
         fakeTweetChat,
         fakeTweetChatHandler: fakeTweetChatHandler,
+
+        different_loadings,
+        setDifferentLoadingsHandler: setDifferentLoadingsHandler,
       }}
     >
       {props.children}
