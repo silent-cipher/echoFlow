@@ -1,13 +1,13 @@
 .notification {
   margin-bottom: 1rem;
-  box-shadow: var(--box-shadow-larger-outset);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   opacity: 0.9;
   transition: 0.3s ease;
-  padding: 20px 0px 0px 0px;
+  padding: 4px 0px 0px 0px;
   animation: toast-in-right 0.7s;
   display: flex;
   flex-direction: column;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   min-width: 300px;
 }
 
@@ -16,7 +16,7 @@
   flex-direction: row;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.7rem;
+  padding: 0.5rem;
 }
 
 .logo {
@@ -29,7 +29,7 @@
 }
 
 .logo > svg {
-  color: var(--white-color);
+  color: white;
 }
 
 .content {
@@ -37,14 +37,14 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 0.3rem;
+  gap: 0.1rem;
   max-width: 250px;
 }
 
 .content > h1 {
   padding: 0;
   margin: 0;
-  color: var(--white-color);
+  color: white;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
@@ -54,7 +54,7 @@
 .content > p {
   padding: 0;
   margin: 0;
-  color: var(--white-color);
+  color: white;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -72,7 +72,7 @@
 }
 
 .buttons > button > svg {
-  color: var(--white-color);
+  color: white;
 }
 
 .buttons > button:hover {
@@ -80,8 +80,8 @@
 }
 
 .lowerProgressbar {
-  padding: 6px 0px;
-  background: var(--white-color);
+  padding: 4px 0px;
+  background: rgb(134, 134, 134);
   cursor: pointer;
   display: block;
   width: auto;

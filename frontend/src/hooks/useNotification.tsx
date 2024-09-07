@@ -9,10 +9,10 @@ import { ReactElement } from "react";
 type StatusType = "Success" | "Error" | "Info" | "Warn";
 
 const backGroundColor: Record<StatusType, string> = {
-  Success: "linear-gradient(95deg, #32BB71 15.3%, #2A9D8F 113.45%)",
-  Error: "linear-gradient(95deg, #F6743E -6.96%, #D42525 108.25%)",
-  Info: "linear-gradient(94deg, #2D82B2 -6.52%, #329ABB 108.61%)",
-  Warn: "linear-gradient(93deg, #F8B806 -30.52%, #FF8C04 123.88%)",
+  Success: "linear-gradient(180deg, #32BB71 15.3%, #2A9D8F 113.45%)",
+  Error: "linear-gradient(160deg, #F6743E -6.96%, #D42525 108.25%)",
+  Info: "linear-gradient(150deg, #2D82B2 -6.52%, #329ABB 108.61%)",
+  Warn: "linear-gradient(140deg, #F8B806 -30.52%, #FF8C04 123.88%)",
 };
 
 const logoNotification: Record<StatusType, ReactElement> = {

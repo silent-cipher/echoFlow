@@ -13,7 +13,7 @@ type Props = {
   logo: ReactElement;
 };
 
-const Notification: React.FC<Props> = props => {
+const Notification: React.FC<Props> = (props) => {
   const notifictionCtx = useContext(NotificationContext);
 
   const [width, setWidth] = useState(0);
@@ -24,7 +24,7 @@ const Notification: React.FC<Props> = props => {
   };
   const handleStartTimer = () => {
     const id = setInterval(() => {
-      setWidth(prev => {
+      setWidth((prev) => {
         if (prev < 100) {
           return prev + 0.5;
         }
@@ -70,7 +70,10 @@ const Notification: React.FC<Props> = props => {
           </button>
         </div>
       </div>
-      <div className={`${classes.lowerProgressbar}`} style={{ width: width + "%" }}></div>
+      <div
+        className={`${classes.lowerProgressbar}`}
+        style={{ width: width + "%" }}
+      ></div>
     </div>
   );
 };

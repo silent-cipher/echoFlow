@@ -128,7 +128,7 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
   };
 
   return (
-    <Tabs defaultValue="create-tweets" className="w-lvw p-12">
+    <Tabs defaultValue="create-tweets" className="w-lvw pt-12 min-h-screen">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="create-tweets">Create Tweets</TabsTrigger>
         <TabsTrigger value="tweets-sentiments">Tweets sentiments</TabsTrigger>
@@ -137,7 +137,12 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="create-tweets">
-        <Card>
+        <Card
+          className="flex flex-col"
+          style={{
+            height: "calc(100lvh - 2rem - 3rem - 3rem)",
+          }}
+        >
           <CardHeader>
             <CardTitle>Create Tweets for the agent</CardTitle>
             <CardDescription>
@@ -145,7 +150,7 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
               once
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2 h-[60vh] overflow-y-scroll">
+          <CardContent className="space-y-2 h-full overflow-y-scroll scrollbar-hide">
             {chat_new_tweets.map((tweet: Tweet) => (
               <Card key={tweet.id} className="p-4 space-y-4">
                 <div className="flex flex-col justify-start items-start space-x-4">
@@ -211,14 +216,19 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
         </Card>
       </TabsContent>
       <TabsContent value="tweets-sentiments">
-        <Card>
+        <Card
+          className="flex flex-col"
+          style={{
+            height: "calc(100lvh - 2rem - 3rem - 3rem)",
+          }}
+        >
           <CardHeader>
             <CardTitle>Tweets Sentiments Analysis by AI</CardTitle>
             <CardDescription>
               Analyze the sentiments of the tweets created by the agent
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2 h-[60vh] overflow-y-scroll">
+          <CardContent className="space-y-2 h-full overflow-y-scroll scrollbar-hide">
             {tweet_sentiments.map((sentiment: each_sentiment) => (
               <Card key={sentiment.tweet_id} className="p-4 space-y-4">
                 <div className="flex flex-col justify-start items-start space-x-4">
@@ -275,14 +285,19 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
         </Card>
       </TabsContent>
       <TabsContent value="fake-tweet-detection">
-        <Card>
+        <Card
+          className="flex flex-col"
+          style={{
+            height: "calc(100lvh - 2rem - 3rem - 3rem)",
+          }}
+        >
           <CardHeader>
             <CardTitle>Fake Tweets Detection</CardTitle>
             <CardDescription>
               Detect fake tweets created by the agent
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2 h-[60vh] overflow-y-scroll">
+          <CardContent className="space-y-2 h-full overflow-y-scroll scrollbar-hide">
             <AlertIpfsId />
             {fakeTweetChat.map((chat, index) => (
               <Card key={index} className="p-4 space-y-4">

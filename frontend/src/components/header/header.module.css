@@ -17,14 +17,14 @@
 .header_background {
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(20px);
-  background: linear-gradient(90deg, #0669f51a 0, #05060800 100%);
+  background: linear-gradient(180deg, #f3f3f3 0, #c5c5c5 100%);
 }
 .line1,
 .line2,
 .line3 {
   width: 20px;
   height: 2px;
-  background: white;
+  background: rgb(0, 0, 0);
   margin: 4px 2px;
   transition: all 0.5s;
 }
@@ -129,7 +129,7 @@
     top: 0;
     left: 0;
     width: -webkit-fill-available;
-    min-height: calc(100vh - 4rem);
+    min-height: calc(100vh);
     background-color: #1d9bf0;
     z-index: 210;
     display: flex;
