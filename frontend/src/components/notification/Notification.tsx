@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState, useContext } from "react";
-import classes from "@/components/notification/notification.module.css";
-import NotificationContext from "@/contexts/NotificationContext";
-import { RxCross1 } from "react-icons/rx";
 import { ReactElement } from "react";
+import { RxCross1 } from "react-icons/rx";
+import React, { useEffect, useState, useContext } from "react";
+import NotificationContext from "@/contexts/NotificationContext";
+import classes from "@/components/notification/notification.module.css";
 
 type Props = {
   title: string;
@@ -56,7 +56,11 @@ const Notification: React.FC<Props> = (props) => {
       onMouseLeave={handleStartTimer}
       key={props.id}
       className={`${classes.notification}`}
-      style={{ background: props.type }}
+      style={
+        {
+          "--color-notification": props.type,
+        } as React.CSSProperties
+      }
     >
       <div className={classes.box}>
         <div className={classes.logo}>{props.logo}</div>

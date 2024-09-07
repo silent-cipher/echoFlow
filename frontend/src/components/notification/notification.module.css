@@ -1,6 +1,6 @@
 .notification {
   margin-bottom: 1rem;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
   opacity: 0.9;
   transition: 0.3s ease;
   padding: 4px 0px 0px 0px;
@@ -9,6 +9,7 @@
   flex-direction: column;
   border-radius: 0.5rem;
   min-width: 300px;
+  background-color: white;
 }
 
 .box {
@@ -20,7 +21,7 @@
 }
 
 .logo {
-  background: rgb(68, 70, 84, 0.5);
+  background: var(--color-notification);
   height: 22px;
   width: 22px;
   display: grid;
@@ -29,7 +30,7 @@
 }
 
 .logo > svg {
-  color: white;
+  color: black;
 }
 
 .content {
@@ -44,17 +45,23 @@
 .content > h1 {
   padding: 0;
   margin: 0;
-  color: white;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
   text-transform: capitalize;
+  background: var(--color-notification);
+  background: -webkit-linear-gradient(--color-notification);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .content > p {
   padding: 0;
   margin: 0;
-  color: white;
+  background: var(--color-notification);
+  background: -webkit-linear-gradient(--color-notification);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -72,7 +79,7 @@
 }
 
 .buttons > button > svg {
-  color: white;
+  color: rgb(66, 62, 62);
 }
 
 .buttons > button:hover {
@@ -81,7 +88,7 @@
 
 .lowerProgressbar {
   padding: 4px 0px;
-  background: rgb(134, 134, 134);
+  background: var(--color-notification);
   cursor: pointer;
   display: block;
   width: auto;

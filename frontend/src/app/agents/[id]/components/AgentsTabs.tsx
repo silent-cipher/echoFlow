@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import AppContext from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/loading/Loading";
+import { CopyToClipBoard } from "./CopyToClipBoard";
 import usePostResponse from "@/hooks/usePostResponse";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -197,13 +198,16 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
           <CardContent className="space-y-2 h-full overflow-y-scroll scrollbar-hide">
             {chat_new_tweets.map((tweet: Tweet) => (
               <Card key={tweet.id} className="p-4 space-y-4">
-                <div className="flex flex-col justify-start items-start space-x-4">
+                <div className="flex flex-col justify-start items-start space-x-4 relative">
                   <p className="text-sm text-gray-500">
                     {tweet.is_ai_generated ? "AI Generated" : "User Generated"}
                   </p>
                   <h2 className="text-lg font-semibold">
                     {"tweet_heading" in tweet ? tweet.tweet_heading : ""}
                   </h2>
+                  <div className="absolute right-8 top-4">
+                    {tweet.is_ai_generated && <CopyToClipBoard data={tweet} />}
+                  </div>
                 </div>
                 <CardContent className="space-y-2">
                   <div className="w-full p-2 border border-gray-300 rounded">
