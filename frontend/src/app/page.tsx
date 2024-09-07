@@ -4,6 +4,8 @@ import useGetResponse from "@/hooks/useGetResponse";
 import { AllAgents } from "@/components/components/AllAgents";
 import { CreateNewAgents } from "@/components/components/CreateNewAgents";
 import { LoadingTweetsAgents } from "@/components/components/LoadingTweetsAgents";
+import { useWriteContract, useAccount, useReadContract } from "wagmi";
+import { openApiChatGpt, agent } from "../../config";
 
 interface Agent {
   agent_id: string;
@@ -11,9 +13,43 @@ interface Agent {
   name: string;
   description: string;
 }
+
+const message = `
+    Analyze the sentiment of the following tweet:
+    
+    Tweet: ""\u201cAmerica First Legal (AFL) filed an amended lawsuit\u00a0against Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Maricopa, Mohave, Navajo, Pima, Pinal, Santa Cruz, Yavapai, and Yuma for failing to remove non-citizens from its voter rolls.\u201d x.com/america1stlega\u2026""
+    
+    Provide the following information:
+    - Overall sentiment: (positive, negative, neutral)
+    - Keywords or topics identified in the tweet
+    - A brief explanation of why the sentiment was classified that way`;
 export default function Home() {
   const [allAgents, setAllAgents] = useState([] as Agent[]);
   const { getResponse, loading } = useGetResponse();
+  const { address } = useAccount();
+  const { writeContract } = useWriteContract();
+  // const msgHistory = useReadContract({
+  //   abi: simpleLlmAbi,
+  //   address: "0xF6168876932289D073567f347121A267095f3DD6",
+  //   functionName: "response",
+  //   // args: [10000],
+  // });
+
+  const chatResponse = useReadContract({
+    abi: agent.abi,
+    address: agent.address as `0x${string}`,
+    functionName: "getMessageHistory",
+    args: [0],
+  });
+  const chatMessage = useReadContract({
+    abi: agent.abi,
+    address: agent.address as `0x${string}`,
+    functionName: "isRunFinished",
+    args: [0],
+  });
+  // console.log(msgHistory.data);
+  console.log(chatMessage.data);
+  console.log(chatResponse.data);
 
   useEffect(() => {
     const fetchAllAgents = async () => {
@@ -26,6 +62,30 @@ export default function Home() {
     fetchAllAgents();
   }, []);
 
+  const getTweetSentiment = async () => {
+    const response = await writeContract(
+      {
+        abi: openApiChatGpt.abi,
+        address: openApiChatGpt.address as `0x${string}`,
+        functionName: "startChat",
+        args: [message],
+      },
+      { onSuccess: (response) => console.log(response) }
+    );
+  };
+
+  const getTweetSentimentFromAgent = async () => {
+    const response = await writeContract(
+      {
+        abi: agent.abi,
+        address: agent.address as `0x${string}`,
+        functionName: "runAgent",
+        args: [message, 1],
+      },
+      { onSuccess: (response) => console.log(response) }
+    );
+  };
+
   return (
     <div className="min-h-screen">
       <main className="flex flex-row items-start justify-start flex-wrap pt-28 pl-8 pr-8 gap-8">
@@ -35,6 +95,7 @@ export default function Home() {
         ) : (
           <AllAgents allAgents={allAgents} />
         )}
+        <button onClick={getTweetSentimentFromAgent}>getSentiment</button>
       </main>
     </div>
   );

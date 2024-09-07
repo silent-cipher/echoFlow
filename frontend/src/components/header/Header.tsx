@@ -69,7 +69,7 @@ const Header = () => {
             handleNavLinkClick(0);
           }}
         >
-          <Image src={"/logo.png"} width={50} height={48} alt="logo" />
+          <Image src={"/logo.png"} width={40} height={40} alt="logo" />
         </Link>
       </div>
 

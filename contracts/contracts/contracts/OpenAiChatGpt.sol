@@ -8,7 +8,6 @@ import "./interfaces/IOracle.sol";
 // @title OpenAiChatGpt
 // @notice This contract interacts with teeML oracle to handle chat interactions using the OpenAI model.
 contract OpenAiChatGpt {
-
     struct ChatRun {
         address owner;
         IOracle.Message[] messages;
@@ -41,19 +40,19 @@ contract OpenAiChatGpt {
         chatRunsCount = 0;
 
         config = IOracle.OpenAiRequest({
-            model : "gpt-4-turbo-preview",
-            frequencyPenalty : 21, // > 20 for null
-            logitBias : "", // empty str for null
-            maxTokens : 1000, // 0 for null
-            presencePenalty : 21, // > 20 for null
-            responseFormat : "{\"type\":\"text\"}",
-            seed : 0, // null
-            stop : "", // null
-            temperature : 10, // Example temperature (scaled up, 10 means 1.0), > 20 means null
-            topP : 101, // Percentage 0-100, > 100 means null
-            tools : "[{\"type\":\"function\",\"function\":{\"name\":\"web_search\",\"description\":\"Search the internet\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"Search query\"}},\"required\":[\"query\"]}}},{\"type\":\"function\",\"function\":{\"name\":\"code_interpreter\",\"description\":\"Evaluates python code in a sandbox environment. The environment resets on every execution. You must send the whole script every time and print your outputs. Script should be pure python code that can be evaluated. It should be in python format NOT markdown. The code should NOT be wrapped in backticks. All python packages including requests, matplotlib, scipy, numpy, pandas, etc are available. Output can only be read from stdout, and stdin. Do not use things like plot.show() as it will not work. print() any output and results so you can capture the output.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"string\",\"description\":\"The pure python script to be evaluated. The contents will be in main.py. It should not be in markdown format.\"}},\"required\":[\"code\"]}}}]",
-            toolChoice : "auto", // "none" or "auto"
-            user : "" // null
+            model: "gpt-4-turbo-preview",
+            frequencyPenalty: 21, // > 20 for null
+            logitBias: "", // empty str for null
+            maxTokens: 1000, // 0 for null
+            presencePenalty: 21, // > 20 for null
+            responseFormat: '{"type":"text"}',
+            seed: 0, // null
+            stop: "", // null
+            temperature: 10, // Example temperature (scaled up, 10 means 1.0), > 20 means null
+            topP: 101, // Percentage 0-100, > 100 means null
+            tools: '[{"type":"function","function":{"name":"web_search","description":"Search the internet","parameters":{"type":"object","properties":{"query":{"type":"string","description":"Search query"}},"required":["query"]}}},{"type":"function","function":{"name":"code_interpreter","description":"Evaluates python code in a sandbox environment. The environment resets on every execution. You must send the whole script every time and print your outputs. Script should be pure python code that can be evaluated. It should be in python format NOT markdown. The code should NOT be wrapped in backticks. All python packages including requests, matplotlib, scipy, numpy, pandas, etc are available. Output can only be read from stdout, and stdin. Do not use things like plot.show() as it will not work. print() any output and results so you can capture the output.","parameters":{"type":"object","properties":{"code":{"type":"string","description":"The pure python script to be evaluated. The contents will be in main.py. It should not be in markdown format."}},"required":["code"]}}}]',
+            toolChoice: "auto", // "none" or "auto"
+            user: "" // null
         });
     }
 
@@ -108,19 +107,31 @@ contract OpenAiChatGpt {
     ) public onlyOracle {
         ChatRun storage run = chatRuns[runId];
         require(
-            keccak256(abi.encodePacked(run.messages[run.messagesCount - 1].role)) == keccak256(abi.encodePacked("user")),
+            keccak256(
+                abi.encodePacked(run.messages[run.messagesCount - 1].role)
+            ) == keccak256(abi.encodePacked("user")),
             "No message to respond to"
         );
 
         if (!compareStrings(errorMessage, "")) {
-            IOracle.Message memory newMessage = createTextMessage("assistant", errorMessage);
+            IOracle.Message memory newMessage = createTextMessage(
+                "assistant",
+                errorMessage
+            );
             run.messages.push(newMessage);
             run.messagesCount++;
         } else {
             if (compareStrings(response.content, "")) {
-                IOracle(oracleAddress).createFunctionCall(runId, response.functionName, response.functionArguments);
+                IOracle(oracleAddress).createFunctionCall(
+                    runId,
+                    response.functionName,
+                    response.functionArguments
+                );
             } else {
-                IOracle.Message memory newMessage = createTextMessage("assistant", response.content);
+                IOracle.Message memory newMessage = createTextMessage(
+                    "assistant",
+                    response.content
+                );
                 run.messages.push(newMessage);
                 run.messagesCount++;
             }
@@ -143,7 +154,10 @@ contract OpenAiChatGpt {
             "No function to respond to"
         );
         if (compareStrings(errorMessage, "")) {
-            IOracle.Message memory newMessage = createTextMessage("user", response);
+            IOracle.Message memory newMessage = createTextMessage(
+                "user",
+                response
+            );
             run.messages.push(newMessage);
             run.messagesCount++;
             IOracle(oracleAddress).createOpenAiLlmCall(runId, config);
@@ -156,12 +170,12 @@ contract OpenAiChatGpt {
     function addMessage(string memory message, uint runId) public {
         ChatRun storage run = chatRuns[runId];
         require(
-            keccak256(abi.encodePacked(run.messages[run.messagesCount - 1].role)) == keccak256(abi.encodePacked("assistant")),
+            keccak256(
+                abi.encodePacked(run.messages[run.messagesCount - 1].role)
+            ) == keccak256(abi.encodePacked("assistant")),
             "No response to previous message"
         );
-        require(
-            run.owner == msg.sender, "Only chat owner can add messages"
-        );
+        require(run.owner == msg.sender, "Only chat owner can add messages");
 
         IOracle.Message memory newMessage = createTextMessage("user", message);
         run.messages.push(newMessage);
@@ -174,15 +188,39 @@ contract OpenAiChatGpt {
     // @param chatId The ID of the chat run
     // @return An array of messages
     // @dev Called by teeML oracle
-    function getMessageHistory(uint chatId) public view returns (IOracle.Message[] memory) {
+    function getMessageHistory(
+        uint chatId
+    ) public view returns (IOracle.Message[] memory) {
         return chatRuns[chatId].messages;
+    }
+
+    // @notice Retrieves the message history of a chat run for a given user address
+    // @param user The address of the user
+    // @return An array of messages
+    function getUserChatHistory(
+        address user
+    ) public view returns (IOracle.Message[] memory) {
+        IOracle.Message[] memory userMessages = new IOracle.Message[](
+            chatRunsCount
+        );
+        uint userMessagesCount = 0;
+        for (uint i = 0; i < chatRunsCount; i++) {
+            if (chatRuns[i].owner == user) {
+                userMessages[userMessagesCount] = chatRuns[i].messages[0];
+                userMessagesCount++;
+            }
+        }
+        return userMessages;
     }
 
     // @notice Creates a text message with the given role and content
     // @param role The role of the message
     // @param content The content of the message
     // @return The created message
-    function createTextMessage(string memory role, string memory content) private pure returns (IOracle.Message memory) {
+    function createTextMessage(
+        string memory role,
+        string memory content
+    ) private pure returns (IOracle.Message memory) {
         IOracle.Message memory newMessage = IOracle.Message({
             role: role,
             content: new IOracle.Content[](1)
@@ -196,7 +234,11 @@ contract OpenAiChatGpt {
     // @param a The first string
     // @param b The second string
     // @return True if the strings are equal, false otherwise
-    function compareStrings(string memory a, string memory b) private pure returns (bool) {
-        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+    function compareStrings(
+        string memory a,
+        string memory b
+    ) private pure returns (bool) {
+        return (keccak256(abi.encodePacked((a))) ==
+            keccak256(abi.encodePacked((b))));
     }
 }

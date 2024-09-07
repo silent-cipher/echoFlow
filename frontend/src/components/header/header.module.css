@@ -69,8 +69,8 @@
 }
 .left_logo > a > img {
   border-radius: 50%;
-  height: 48px;
-  width: 48px;
+  height: 40px;
+  width: 40px;
 }
 .right_Navigation {
   display: flex;

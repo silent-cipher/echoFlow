@@ -21,8 +21,7 @@
     const { type, value } = obj;
     console.log(type, value);
     if (type === "POST") {
-      const CLASS_NAME =
-        "css-146c3p1 r-8akbws r-krxsd3 r-dnmrzs r-1udh08x r-bcqeeo r-1ttztb7 r-qvutc0 r-37j5jr r-1b43r93 r-14yzgew r-16dba41 r-bnwqim";
+      const CLASS_NAME = "css-175oi2r r-1iusvr4 r-16y2uox r-1777fci r-kzbkwu";
       const length = document.getElementsByClassName(CLASS_NAME).length;
 
       let set_of_tweets = new Set(current_tweets);

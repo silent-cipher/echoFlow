@@ -3,7 +3,7 @@
 <br />
 <div align="center">
 <a href="https://github.com/silent-cipher/stakeStream">
-   <img src="./image/logo.jpg" style="border-radius:12px" height="90px" width="90px">
+   <img src="./image/logo.jpg" style="border-radius:12px" height="100px">
 </a>
 <h2 align="center">AI-Powered Tweet Analysis and Generation</h2>
 
