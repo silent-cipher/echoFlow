@@ -45,9 +45,9 @@ const Header = () => {
     };
   }, []);
 
-  useEffect(() => {
-    navBarBottomNavigation(currentNav);
-  }, [windowWidth]);
+  // useEffect(() => {
+  //   navBarBottomNavigation(currentNav);
+  // }, [windowWidth]);
 
   useEffect(() => {
     if (currentPath == "/") {
@@ -103,10 +103,10 @@ const Header = () => {
             style={
               currentNav == index
                 ? isNavCollapsed
-                  ? { color: "#000" }
-                  : { color: "#1d9bf0" }
+                  ? { color: "#aaaaaa" }
+                  : { color: "#000000" }
                 : {
-                    color: "#000",
+                    color: "#aaaaaa",
                   }
             }
           >

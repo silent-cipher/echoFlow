@@ -13,11 +13,14 @@
   z-index: 1;
   max-width: 2200px;
   margin: auto;
+  color: white;
 }
 .header_background {
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(20px);
-  background: linear-gradient(180deg, #f3f3f3 0, #c5c5c5 100%);
+  background: #ffffff;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3),
+    0px 4px 8px 3px rgba(0, 0, 0, 0.15);
 }
 .line1,
 .line2,
@@ -86,7 +89,7 @@
   color: white;
   cursor: pointer;
 }
-.right_Navigation::after {
+/* .right_Navigation::after {
   content: "";
   position: absolute;
   left: 0;
@@ -98,7 +101,7 @@
   translate: var(--left-navbar, 0px) 0;
   transform-origin: left;
   transition: 0.2s;
-}
+} */
 .contactlogos {
   flex: 1;
   display: flex;

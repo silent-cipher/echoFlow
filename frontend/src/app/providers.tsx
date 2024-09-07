@@ -6,6 +6,7 @@ import {
   getDefaultConfig,
   RainbowKitProvider,
   lightTheme,
+  Chain,
 } from "@rainbow-me/rainbowkit";
 import {
   mainnet,
@@ -29,10 +30,29 @@ import {
 } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
+// configure galadriel chain
+
+const galadriel = {
+  id: 696969,
+  name: "Galadriel Devnet",
+  rpcUrls: {
+    default: {
+      http: ["https://devnet.galadriel.com"],
+    },
+  },
+  nativeCurrency: {
+    name: "Galadriel",
+    symbol: "GAL",
+    decimals: 18,
+  },
+  iconUrl: "/galadriel-logo.png",
+} as const satisfies Chain;
+
 const config = getDefaultConfig({
   appName: "EthOnline_H",
   projectId: "EthOnline_1234",
   chains: [
+    galadriel,
     mainnet,
     polygon,
     optimism,
@@ -63,8 +83,8 @@ export function Providers({ children }: { children: ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
           theme={lightTheme({
-            accentColor: "#1d9bf0",
-            accentColorForeground: "white",
+            accentColor: "#ffffff",
+            accentColorForeground: "black",
             borderRadius: "medium",
             fontStack: "system",
             overlayBlur: "small",

@@ -11,7 +11,7 @@ import { NotificationContextProvider } from "@/contexts/NotificationContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Eth online hackathon 2024 StakeStream",
+  title: "Create Post",
   description: "Eth online hackathon 2024 StakeStream",
   icons: ["logo.png"],
 };

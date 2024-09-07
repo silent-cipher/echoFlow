@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <main className="flex flex-row items-start justify-start flex-wrap pt-20 pl-8 pr-8 gap-8">
+      <main className="flex flex-row items-start justify-start flex-wrap pt-28 pl-8 pr-8 gap-8">
         <CreateNewAgents />
         {loading ? (
           <LoadingTweetsAgents />
