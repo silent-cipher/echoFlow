@@ -24,8 +24,8 @@ const message = `
     - Keywords or topics identified in the tweet
     - A brief explanation of why the sentiment was classified that way`;
 export default function Home() {
-  const [allAgents, setAllAgents] = useState([] as Agent[]);
-  const { getResponse, loading } = useGetResponse();
+  // const [allAgents, setAllAgents] = useState([] as Agent[]);
+  // const { getResponse, loading } = useGetResponse();
   const { address } = useAccount();
   const { writeContract } = useWriteContract();
   // const msgHistory = useReadContract({
@@ -52,42 +52,42 @@ export default function Home() {
     args: [0],
   });
   // console.log(msgHistory.data);
-  console.log(deployedAllAgents);
+  // console.log(deployedAllAgents);
 
-  useEffect(() => {
-    const fetchAllAgents = async () => {
-      const response = await getResponse("agents");
-      console.log(response);
-      if (response) {
-        setAllAgents(response);
-      }
-    };
-    fetchAllAgents();
-  }, []);
+  // useEffect(() => {
+  //   const fetchAllAgents = async () => {
+  //     const response = await getResponse("agents");
+  //     console.log(response);
+  //     if (response) {
+  //       setAllAgents(response);
+  //     }
+  //   };
+  //   fetchAllAgents();
+  // }, []);
 
-  const getTweetSentiment = async () => {
-    const response = await writeContract(
-      {
-        abi: openApiChatGpt.abi,
-        address: openApiChatGpt.address as `0x${string}`,
-        functionName: "startChat",
-        args: [message],
-      },
-      { onSuccess: (response) => console.log(response) }
-    );
-  };
+  // const getTweetSentiment = async () => {
+  //   const response = await writeContract(
+  //     {
+  //       abi: openApiChatGpt.abi,
+  //       address: openApiChatGpt.address as `0x${string}`,
+  //       functionName: "startChat",
+  //       args: [message],
+  //     },
+  //     { onSuccess: (response) => console.log(response) }
+  //   );
+  // };
 
-  const getTweetSentimentFromAgent = async () => {
-    const response = await writeContract(
-      {
-        abi: agent.abi,
-        address: agent.address as `0x${string}`,
-        functionName: "runAgent",
-        args: [message, 1],
-      },
-      { onSuccess: (response) => console.log(response) }
-    );
-  };
+  // const getTweetSentimentFromAgent = async () => {
+  //   const response = await writeContract(
+  //     {
+  //       abi: agent.abi,
+  //       address: agent.address as `0x${string}`,
+  //       functionName: "runAgent",
+  //       args: [message, 1],
+  //     },
+  //     { onSuccess: (response) => console.log(response) }
+  //   );
+  // };
 
   return (
     <div className="min-h-screen">
@@ -98,7 +98,7 @@ export default function Home() {
         ) : (
           <AllAgents allAgents={deployedAllAgents as any} />
         )}
-        <button onClick={getTweetSentimentFromAgent}>getSentiment</button>
+        {/* <button onClick={getTweetSentimentFromAgent}>getSentiment</button> */}
       </main>
     </div>
   );

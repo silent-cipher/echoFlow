@@ -44,8 +44,8 @@ export const extractUserTweetQuery = (prompt: string) => {
 
 const string_to_json_for_new_tweet = (string: string) => {
   try {
-    // const cleaned_response = string.trim().slice(7, -3).trim();
-    const response = JSON.parse(string);
+    const cleaned_response = string.trim().slice(7, -3).trim();
+    const response = JSON.parse(cleaned_response);
     return {
       tweet_heading: response.tweet_heading,
       tweet_description: response.tweet_description,
@@ -53,12 +53,22 @@ const string_to_json_for_new_tweet = (string: string) => {
       tags: response.tags,
     };
   } catch (error) {
-    return {
-      tweet_heading: "Error",
-      tweet_description: "An error occurred while generating the tweet.",
-      hashtags: ["Error"],
-      tags: ["Error"],
-    };
+    try {
+      const response = JSON.parse(string);
+      return {
+        tweet_heading: response.tweet_heading,
+        tweet_description: response.tweet_description,
+        hashtags: response.hashtags,
+        tags: response.tags,
+      };
+    } catch (error) {
+      return {
+        tweet_heading: "Error",
+        tweet_description: "An error occurred while generating the tweet.",
+        hashtags: ["Error"],
+        tags: ["Error"],
+      };
+    }
   }
 };
 
@@ -84,6 +94,7 @@ const prompt_for_sentiment_analysis = (tweet: string) => {
 const string_to_json_for_sentiment_analysis = (string: string) => {
   try {
     const cleaned_response = string.trim().slice(7, -3).trim();
+    console.log(cleaned_response);
     const response = JSON.parse(cleaned_response);
     return {
       sentiment: response.sentiment,
@@ -91,12 +102,20 @@ const string_to_json_for_sentiment_analysis = (string: string) => {
       explanation: response.explanation,
     };
   } catch (error) {
-    // const response = JSON.parse(string);
-    return {
-      sentiment: "",
-      keywords: [],
-      explanation: "",
-    };
+    try {
+      const response = JSON.parse(string);
+      return {
+        sentiment: response.sentiment,
+        keywords: response.keywords,
+        explanation: response.explanation,
+      };
+    } catch (error) {
+      return {
+        sentiment: "Error",
+        keywords: ["Error"],
+        explanation: "An error occurred while analyzing the sentiment.",
+      };
+    }
   }
 };
 

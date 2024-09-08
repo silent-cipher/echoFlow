@@ -16,7 +16,8 @@
     "typescript": "^5.4.2"
   },
   "dependencies": {
+    "dotenv": "^16.4.4",
     "ethers": "^6.11.1",
-    "dotenv": "^16.4.4"
+    "examples": "file:"
   }
 }

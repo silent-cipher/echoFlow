@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AlertIpfsId } from "./AlertIpfsId";
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import AppContext from "@/contexts/AppContext";
@@ -190,7 +190,13 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
           console.log(new_sentiment);
           updateTweetSentimentsHandler(new_sentiment);
           setCurrentSentimentSearchId({ tweet_id: "", tweet_sentence: "" });
-
+          setDifferentLoadingsHandler({
+            ...different_loadings,
+            sentimentLoading: {
+              tweet_id: "",
+              loading: false,
+            },
+          });
           clearInterval(interval);
         }
       }, 2000);
@@ -212,12 +218,80 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     },
   });
 
-  const { data: agentSystemPrompt }: { data: any } = useReadContract({
+  const {
+    data: agentSystemPrompt,
+    refetch: refetchTweetHistory,
+    isRefetching: isRefetchingTweetHistory,
+  } = useReadContract({
     abi: agent.abi,
     address: agentDetails as `0x${string}`,
     functionName: "getMessageHistory",
-    args: [4],
+    args: [8],
   });
+
+  // useEffect(() => {
+  //   let interval: any;
+  //   const refetchData = async () => {
+  //     interval = setInterval(async () => {
+  //       await refetchTweetHistory();
+  //       console.log("------------------------------------------------------");
+  //       if (agentSystemPrompt && (agentSystemPrompt as any).length >= 3) {
+  //         const new_tweet = string_to_json_for_new_tweet(
+  //           (agentSystemPrompt as any)[2].content[0].value
+  //         );
+  //         setChatNewTweetsHandler({
+  //           ...new_tweet,
+  //           is_ai_generated: true,
+  //           id: Math.random().toString(36).substr(2, 9),
+  //         });
+  //         setDifferentLoadingsHandler({
+  //           ...different_loadings,
+  //           newTweetLoading: false,
+  //         });
+  //         clearInterval(interval);
+  //       }
+  //     }, 2000);
+  //   };
+
+  //   if (different_loadings.newTweetLoading) refetchData();
+
+  //   return () => clearInterval(interval);
+  // }, [different_loadings.newTweetLoading]);
+
+  useEffect(() => {
+    let interval: any;
+
+    const refetchData = async () => {
+      interval = setInterval(async () => {
+        await refetchTweetHistory();
+        console.log("------------------------------------------------------");
+
+        if (agentSystemPrompt && (agentSystemPrompt as any).length >= 3) {
+          console.log("Condition met, clearing interval");
+          const new_tweet = string_to_json_for_new_tweet(
+            (agentSystemPrompt as any)[2].content[0].value
+          );
+          setChatNewTweetsHandler({
+            ...new_tweet,
+            is_ai_generated: true,
+            id: Math.random().toString(36).substr(2, 9),
+          });
+          setDifferentLoadingsHandler({
+            ...different_loadings,
+            newTweetLoading: false,
+          });
+          clearInterval(interval);
+        } else {
+          console.log("Condition not met");
+        }
+      }, 2000);
+    };
+
+    if (different_loadings.newTweetLoading) {
+      console.log("Starting interval");
+      refetchData();
+    }
+  }, [different_loadings.newTweetLoading]);
 
   console.log(agentSystemPrompt);
 
@@ -236,26 +310,28 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
   // }, []);
 
   useEffect(() => {
-    if (!agentSystemPrompt || agentSystemPrompt.length < 3) return;
+    if (!agentSystemPrompt || (agentSystemPrompt as any).length < 3) return;
     const new_tweet = string_to_json_for_new_tweet(
-      agentSystemPrompt[2].content[0].value
+      (agentSystemPrompt as any)[2].content[0].value
     );
     const userQuery = extractUserTweetQuery(
-      agentSystemPrompt[1].content[0].value
+      (agentSystemPrompt as any)[1].content[0].value
     );
 
-    const allTweets = extractTweets(agentSystemPrompt[0].content[0].value);
+    const allTweets = extractTweets(
+      (agentSystemPrompt as any)[0].content[0].value
+    );
 
     // console.log(allTweets);
 
     setTweetSentimentsHandler(allTweets);
 
     console.log(userQuery);
-    setChatNewTweetsHandler({
-      question: userQuery,
-      is_ai_generated: false,
-      id: Math.random().toString(36).substr(2, 9),
-    });
+    // setChatNewTweetsHandler({
+    //   question: userQuery,
+    //   is_ai_generated: false,
+    //   id: Math.random().toString(36).substr(2, 9),
+    // });
     setChatNewTweetsHandler({
       ...new_tweet,
       is_ai_generated: true,
@@ -300,10 +376,10 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     //   id: Math.random().toString(36).substr(2, 9),
     // };
     // setChatNewTweetsHandler(new_tweet);
-    setDifferentLoadingsHandler({
-      ...different_loadings,
-      newTweetLoading: false,
-    });
+    // setDifferentLoadingsHandler({
+    //   ...different_loadings,
+    //   newTweetLoading: false,
+    // });
   };
 
   const handlegetSentiments = async (
@@ -346,13 +422,13 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     //   tweet_sentence,
     // };
     // updateTweetSentimentsHandler(new_sentiment);
-    setDifferentLoadingsHandler({
-      ...different_loadings,
-      sentimentLoading: {
-        tweet_id: "",
-        loading: false,
-      },
-    });
+    // setDifferentLoadingsHandler({
+    //   ...different_loadings,
+    //   sentimentLoading: {
+    //     tweet_id: "",
+    //     loading: false,
+    //   },
+    // });
   };
 
   const handleFakeTweetDetection = async () => {
