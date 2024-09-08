@@ -5,11 +5,11 @@ import { AllAgents } from "@/components/components/AllAgents";
 import { CreateNewAgents } from "@/components/components/CreateNewAgents";
 import { LoadingTweetsAgents } from "@/components/components/LoadingTweetsAgents";
 import { useWriteContract, useAccount, useReadContract } from "wagmi";
-import { openApiChatGpt, agent } from "../../config";
+import { openApiChatGpt, agent, agentManager } from "../../config";
 
-interface Agent {
-  agent_id: string;
-  tweets_id: string;
+export interface Agent {
+  agentId: string;
+  agentAddress: string;
   name: string;
   description: string;
 }
@@ -35,11 +35,15 @@ export default function Home() {
   //   // args: [10000],
   // });
 
-  const chatResponse = useReadContract({
-    abi: agent.abi,
-    address: agent.address as `0x${string}`,
-    functionName: "getMessageHistory",
-    args: [0],
+  const {
+    data: deployedAllAgents,
+    isLoading,
+    isFetched,
+  } = useReadContract({
+    abi: agentManager.abi,
+    address: agentManager.address as `0x${string}`,
+    functionName: "getAgentsByOwner",
+    args: [address],
   });
   const chatMessage = useReadContract({
     abi: agent.abi,
@@ -48,8 +52,7 @@ export default function Home() {
     args: [0],
   });
   // console.log(msgHistory.data);
-  console.log(chatMessage.data);
-  console.log(chatResponse.data);
+  console.log(deployedAllAgents);
 
   useEffect(() => {
     const fetchAllAgents = async () => {
@@ -90,10 +93,10 @@ export default function Home() {
     <div className="min-h-screen">
       <main className="flex flex-row items-start justify-start flex-wrap pt-28 pl-8 pr-8 gap-8">
         <CreateNewAgents />
-        {loading ? (
+        {isLoading ? (
           <LoadingTweetsAgents />
         ) : (
-          <AllAgents allAgents={allAgents} />
+          <AllAgents allAgents={deployedAllAgents as any} />
         )}
         <button onClick={getTweetSentimentFromAgent}>getSentiment</button>
       </main>

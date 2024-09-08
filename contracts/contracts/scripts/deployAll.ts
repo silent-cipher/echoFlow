@@ -10,14 +10,14 @@ async function main() {
   // const oracleAddress: string = await deployOracle();
   // console.log();
 
-  await deployAgentManager();
+  // await deployAgentManager();
   // await deploySimpleLlm(oracleAddress);
   // await deployDalle(oracleAddress);
   // await deployVitailik(oracleAddress);
   // await deployAgent(process.env.ORACLE_ADDRESS as string);
   // console.log();
   // await deployChatGptWithKnowledgeBase("ChatGpt", oracleAddress, "");
-  // await deployChatGpt("OpenAiChatGpt", oracleAddress);
+  await deployChatGpt("OpenAiChatGpt", process.env.ORACLE_ADDRESS as string);
   // for (let contractName of [
   //   "OpenAiChatGpt",
   //   "GroqChatGpt",

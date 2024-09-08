@@ -5,7 +5,7 @@ const extractTweets = (prompt: string) => {
   let index = 0;
   while ((match = tweetRegex.exec(prompt)) !== null) {
     const tweetText = match[1].trim();
-    tweets.push({ tweet: tweetText, id: index });
+    tweets.push(tweetText);
     index++;
   }
 
@@ -15,7 +15,7 @@ const extractTweets = (prompt: string) => {
 const prompt_for_new_tweet = (new_tweet_query: string) => {
   const prompt = `Based on the following text provided by the user:
         
-        "${new_tweet_query}"
+       [[[${new_tweet_query}]]]
         
         Generate a creative tweet that includes the following:
         - A catchy heading (short and impactful)
@@ -36,10 +36,16 @@ const prompt_for_new_tweet = (new_tweet_query: string) => {
   return prompt;
 };
 
+export const extractUserTweetQuery = (prompt: string) => {
+  const tweetRegex = /\[\[\[(.*?)\]\]\]/g;
+  const match: any = tweetRegex.exec(prompt);
+  return match[1].trim();
+};
+
 const string_to_json_for_new_tweet = (string: string) => {
   try {
-    const cleaned_response = string.trim().slice(7, -3).trim();
-    const response = JSON.parse(cleaned_response);
+    // const cleaned_response = string.trim().slice(7, -3).trim();
+    const response = JSON.parse(string);
     return {
       tweet_heading: response.tweet_heading,
       tweet_description: response.tweet_description,
@@ -85,16 +91,11 @@ const string_to_json_for_sentiment_analysis = (string: string) => {
       explanation: response.explanation,
     };
   } catch (error) {
+    // const response = JSON.parse(string);
     return {
-      sentiment: "negative",
-      keywords: [
-        "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "HARM_CATEGORY_HARASSMENT",
-        "HARM_CATEGORY_HATE_SPEECH",
-        "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-      ],
-      explanation:
-        "The tweet contains negative sentiment because it may contains harmful content such as hate speech, harassment, and sexually explicit content.",
+      sentiment: "",
+      keywords: [],
+      explanation: "",
     };
   }
 };
@@ -123,10 +124,10 @@ const string_to_json_for_detection_of_fake_tweets = (string: string) => {
       explanation: response.explanation,
     };
   } catch (error) {
+    const response = JSON.parse(string);
     return {
-      classification: "fake",
-      explanation:
-        "The tweet is classified as fake because it contains misleading information and false claims.",
+      classification: response.classification,
+      explanation: response.explanation,
     };
   }
 };

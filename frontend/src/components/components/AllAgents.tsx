@@ -8,14 +8,10 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { Agent } from "@/app/page";
 
 type CardProps = React.ComponentProps<typeof Card> & {
-  allAgents: {
-    agent_id: string;
-    tweets_id: string;
-    name: string;
-    description: string;
-  }[];
+  allAgents: Agent[];
 };
 
 export function AllAgents({ className, ...props }: CardProps) {
@@ -27,11 +23,11 @@ export function AllAgents({ className, ...props }: CardProps) {
         (agent: {
           name: string;
           description: string;
-          agent_id: string;
-          tweets_id: string;
+          agentId: string;
+          agentAddress: string;
         }) => {
           return (
-            <Link href={`/agents/${agent.agent_id}`} key={agent.agent_id}>
+            <Link href={`/agents/${agent.agentId}`} key={agent.agentId}>
               <Card className={cn("w-[380px]", className)} {...props}>
                 <CardHeader>
                   <div className="flex flex-row gap-4">

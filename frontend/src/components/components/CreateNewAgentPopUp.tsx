@@ -18,6 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import usePostResponse from "@/hooks/usePostResponse";
 import Loading from "@/components/loading/Loading";
 import { useRouter } from "next/navigation";
+import { useWriteContract } from "wagmi";
+
+import { agentManager } from "../../../config";
+
+const ORACLE_ADDRESS = "0x68EC9556830AD097D661Df2557FBCeC166a0A075";
 
 export function CreateNewAgentPopUp() {
   const [newAgentData, setNewAgentData] = useState({
@@ -27,17 +32,34 @@ export function CreateNewAgentPopUp() {
   });
   const { postResponse, loading } = usePostResponse();
   const router = useRouter();
+  const { data: hash, writeContract, error } = useWriteContract();
+  console.log(error);
 
   const handleCreate = async () => {
     const agentData = {
-      name: newAgentData.app_name,
-      tweets_id: newAgentData.tweets_id,
-      description: newAgentData.app_desc,
+      tweet_id: newAgentData.tweets_id,
     };
-    const response = await postResponse(agentData, "agents");
-    if (response.agent_id != "" && response.agent_id != undefined) {
-      router.push(`/agents/${response.agent_id}`);
-    }
+    const response = await postResponse(agentData, "generate_system_prompt");
+
+    console.log(response);
+
+    writeContract({
+      abi: agentManager.abi,
+      address: agentManager.address as `0x${string}`,
+      functionName: "deployAgent",
+      args: [
+        ORACLE_ADDRESS,
+        response.toString(),
+        newAgentData.app_name,
+        newAgentData.app_desc,
+        true,
+      ],
+    });
+
+    console.log(hash);
+    // if (response.agent_id != "" && response.agent_id != undefined) {
+    //   router.push(`/agents/${response.agent_id}`);
+    // }
   };
   const handleChange = (
     e:

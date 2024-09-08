@@ -15,7 +15,7 @@ const simpleLlm = {
 
 const openApiChatGpt = {
   abi: openApiChatGptAbi,
-  address: "0x6bf17988CDd8685A9aeE850CBc879c8A708d6dF9",
+  address: "0x511E4730FfA7952174e8116CD76986657e58EfEF",
 };
 
 const agent = {

@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AlertIpfsId } from "./AlertIpfsId";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import AppContext from "@/contexts/AppContext";
@@ -17,6 +17,20 @@ import Loading from "@/components/loading/Loading";
 import { CopyToClipBoard } from "./CopyToClipBoard";
 import usePostResponse from "@/hooks/usePostResponse";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  useReadContract,
+  useWriteContract,
+  useWatchContractEvent,
+} from "wagmi";
+import { agentManager, agent, openApiChatGpt } from "../../../../../config";
+import {
+  prompt_for_new_tweet,
+  string_to_json_for_new_tweet,
+  extractUserTweetQuery,
+  extractTweets,
+  prompt_for_sentiment_analysis,
+  string_to_json_for_sentiment_analysis,
+} from "@/hooks/utils";
 
 interface each_tweet {
   tweet_heading: string;
@@ -51,6 +65,10 @@ interface different_loadings {
 }
 
 export function AgentsTabs({ agent_id }: { agent_id: string }) {
+  const [currentSentimentSearchId, setCurrentSentimentSearchId] = useState({
+    tweet_id: "",
+    tweet_sentence: "",
+  });
   const {
     newTweetInput,
     setNewTweetInput,
@@ -73,19 +91,177 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
   } = useContext(AppContext);
   const { postResponse } = usePostResponse();
 
+  const {
+    data: hash,
+    writeContractAsync,
+    error,
+    isSuccess,
+  } = useWriteContract();
+  const { data: agentDetails } = useReadContract({
+    abi: agentManager.abi,
+    address: agentManager.address as `0x${string}`,
+    functionName: "getAgentById",
+    args: [agent_id],
+  });
+  const {
+    data: sentimentCount,
+    refetch: refetchChatCount,
+    isRefetching: isRefetchingChatCount,
+  } = useReadContract({
+    abi: openApiChatGpt.abi,
+    address: openApiChatGpt.address as `0x${string}`,
+    functionName: "getChatRunsCount",
+    args: [],
+  });
+
+  console.log(Number(sentimentCount));
+
+  const {
+    data: sentiment,
+    isRefetching,
+    refetch: refetchSentiment,
+  } = useReadContract({
+    abi: openApiChatGpt.abi,
+    address: openApiChatGpt.address as `0x${string}`,
+    functionName: "getMessageHistory",
+    args: [Number(sentimentCount) - 1],
+  });
+
+  console.log(sentiment);
+  // if (currentSentimentSearchId.tweet_id != "") {
+  //   if (sentiment && (sentiment as any).at(-1).role === "assistant") {
+  //     const assistant_response = string_to_json_for_sentiment_analysis(
+  //       (sentiment as any).at(-1).content[0].value
+  //     );
+  //     const new_sentiment = {
+  //       ...assistant_response,
+  //       ...currentSentimentSearchId,
+  //     };
+  //     console.log(new_sentiment);
+  //     updateTweetSentimentsHandler(new_sentiment);
+  //     setCurrentSentimentSearchId({ tweet_id: "", tweet_sentence: "" });
+  //   }
+  //   // const json_res = string_to_json_for_sentiment_analysis(sentiment);
+  //   // const new_sentiment = {
+  //   //   ...response,
+  //   //   currentSentimentSearchId,
+  //   //   tweet_sentence,
+  //   // };
+  //   // updateTweetSentimentsHandler(new_sentiment);
+  // }
+
+  // useEffect(() => {
+  //   if (isRefetchingChatCount && isRefetching) {
+  //     if ((sentiment as any).at(-1).role === "assistance") {
+  //       const assistant_response = string_to_json_for_sentiment_analysis(
+  //         (sentiment as any).at(-1).content[0].value
+  //       );
+  //       const new_sentiment = {
+  //         ...assistant_response,
+  //         ...currentSentimentSearchId,
+  //       };
+  //       console.log(new_sentiment);
+  //       updateTweetSentimentsHandler(new_sentiment);
+  //       setCurrentSentimentSearchId({ tweet_id: "", tweet_sentence: "" });
+  //     }
+  //   }
+  // }, [isRefetchingChatCount]);
+  const {
+    writeContractAsync: writeContractAsyncSentiment,
+    isSuccess: isSuccessSentiment,
+  } = useWriteContract();
+
   useEffect(() => {
-    const fetchTweets = async () => {
-      if (!agent_id) return;
-      const response = await postResponse(
-        {
-          agent_id,
-        },
-        "get_all_tweets_by_agent_id"
-      );
-      setTweetSentimentsHandler(response);
+    let interval: any;
+    const refetchData = async () => {
+      interval = setInterval(async () => {
+        await refetchChatCount();
+        await refetchSentiment();
+
+        console.log(sentiment);
+        if (sentiment && (sentiment as any).at(-1).role === "assistant") {
+          const assistant_response = string_to_json_for_sentiment_analysis(
+            (sentiment as any).at(-1).content[0].value
+          );
+          const new_sentiment = {
+            ...assistant_response,
+            ...currentSentimentSearchId,
+          };
+          console.log(new_sentiment);
+          updateTweetSentimentsHandler(new_sentiment);
+          setCurrentSentimentSearchId({ tweet_id: "", tweet_sentence: "" });
+
+          clearInterval(interval);
+        }
+      }, 2000);
     };
-    fetchTweets();
-  }, []);
+
+    if (currentSentimentSearchId.tweet_id !== "") refetchData();
+
+    return () => clearInterval(interval);
+  }, [isSuccessSentiment, currentSentimentSearchId.tweet_id]);
+
+  console.log(agentDetails);
+
+  useWatchContractEvent({
+    address: agentDetails as `0x${string}`,
+    abi: agent.abi,
+    eventName: "AgentRunCreated",
+    onLogs(logs) {
+      console.log("New logs!", logs);
+    },
+  });
+
+  const { data: agentSystemPrompt }: { data: any } = useReadContract({
+    abi: agent.abi,
+    address: agentDetails as `0x${string}`,
+    functionName: "getMessageHistory",
+    args: [4],
+  });
+
+  console.log(agentSystemPrompt);
+
+  // useEffect(() => {
+  //   const fetchTweets = async () => {
+  //     if (!agent_id) return;
+  //     const response = await postResponse(
+  //       {
+  //         agent_id,
+  //       },
+  //       "get_all_tweets_by_agent_id"
+  //     );
+  //     setTweetSentimentsHandler(response);
+  //   };
+  //   fetchTweets();
+  // }, []);
+
+  useEffect(() => {
+    if (!agentSystemPrompt || agentSystemPrompt.length < 3) return;
+    const new_tweet = string_to_json_for_new_tweet(
+      agentSystemPrompt[2].content[0].value
+    );
+    const userQuery = extractUserTweetQuery(
+      agentSystemPrompt[1].content[0].value
+    );
+
+    const allTweets = extractTweets(agentSystemPrompt[0].content[0].value);
+
+    // console.log(allTweets);
+
+    setTweetSentimentsHandler(allTweets);
+
+    console.log(userQuery);
+    setChatNewTweetsHandler({
+      question: userQuery,
+      is_ai_generated: false,
+      id: Math.random().toString(36).substr(2, 9),
+    });
+    setChatNewTweetsHandler({
+      ...new_tweet,
+      is_ai_generated: true,
+      id: Math.random().toString(36).substr(2, 9),
+    });
+  }, [agentSystemPrompt]);
 
   const handlerGenerateNewTweets = async () => {
     if (newTweetInput === "") return;
@@ -99,20 +275,31 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
       is_ai_generated: false,
     });
     setNewTweetInput("");
-    const response = await postResponse(
-      {
-        agent_id: agent_id,
-        new_tweet_query: newTweetInput,
-      },
-      "gen_tweet"
-    );
-    console.log(response);
-    const new_tweet = {
-      ...response,
-      is_ai_generated: true,
-      id: Math.random().toString(36).substr(2, 9),
-    };
-    setChatNewTweetsHandler(new_tweet);
+
+    if (!agent_id && !agentDetails) return;
+
+    const query = prompt_for_new_tweet(newTweetInput);
+
+    await writeContractAsync({
+      abi: agent.abi,
+      address: agentDetails as `0x${string}`,
+      functionName: "runAgent",
+      args: [query, 2],
+    });
+    // const response = await postResponse(
+    //   {
+    //     agent_id: agent_id,
+    //     new_tweet_query: newTweetInput,
+    //   },
+    //   "gen_tweet"
+    // );
+    // console.log(response);
+    // const new_tweet = {
+    //   ...response,
+    //   is_ai_generated: true,
+    //   id: Math.random().toString(36).substr(2, 9),
+    // };
+    // setChatNewTweetsHandler(new_tweet);
     setDifferentLoadingsHandler({
       ...different_loadings,
       newTweetLoading: false,
@@ -130,18 +317,35 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
         loading: true,
       },
     });
-    const response = await postResponse(
+
+    const query = prompt_for_sentiment_analysis(tweet_sentence);
+
+    await writeContractAsyncSentiment(
       {
-        tweet: tweet_sentence,
+        abi: openApiChatGpt.abi,
+        address: openApiChatGpt.address as `0x${string}`,
+        functionName: "startChat",
+        args: [query],
       },
-      "tweet_sentiment"
+      {
+        onSuccess: () => {
+          setCurrentSentimentSearchId({ tweet_id, tweet_sentence });
+        },
+      }
     );
-    const new_sentiment = {
-      ...response,
-      tweet_id,
-      tweet_sentence,
-    };
-    updateTweetSentimentsHandler(new_sentiment);
+
+    // const response = await postResponse(
+    //   {
+    //     tweet: tweet_sentence,
+    //   },
+    //   "tweet_sentiment"
+    // );
+    // const new_sentiment = {
+    //   ...response,
+    //   tweet_id,
+    //   tweet_sentence,
+    // };
+    // updateTweetSentimentsHandler(new_sentiment);
     setDifferentLoadingsHandler({
       ...different_loadings,
       sentimentLoading: {
@@ -161,7 +365,6 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     const response = await postResponse(
       {
         tweet: fakeTweetInput,
-        ipfs_id: fakeTweetIPFSID,
       },
       "fake_tweet_detection"
     );
@@ -369,11 +572,10 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
           <CardHeader>
             <CardTitle>Fake Tweets Detection</CardTitle>
             <CardDescription>
-              Detect fake tweets created by the agent
+              Detect fake tweets created by the agent by sending the tweet!
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 h-full overflow-y-scroll scrollbar-hide">
-            <AlertIpfsId />
             {fakeTweetChat.map((chat, index) => (
               <Card key={index} className="p-4 space-y-4">
                 <p className="text-gray-500">{chat}</p>
@@ -390,7 +592,6 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
                   handleFakeTweetDetection();
                 }
               }}
-              disabled={fakeTweetIPFSID === ""}
             />
             <div className="absolute right-12 top-2.5">
               {different_loadings.fakeTweetLoading && (

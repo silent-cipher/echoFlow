@@ -213,6 +213,10 @@ contract OpenAiChatGpt {
         return userMessages;
     }
 
+    function getChatRunsCount() public view returns (uint) {
+        return chatRunsCount;
+    }
+
     // @notice Creates a text message with the given role and content
     // @param role The role of the message
     // @param content The content of the message
