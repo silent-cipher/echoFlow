@@ -96,7 +96,7 @@ export default function Home() {
         {isLoading ? (
           <LoadingTweetsAgents />
         ) : (
-          <AllAgents allAgents={deployedAllAgents as any} />
+          <AllAgents allAgents={(deployedAllAgents || []) as any} />
         )}
         {/* <button onClick={getTweetSentimentFromAgent}>getSentiment</button> */}
       </main>

@@ -73,7 +73,7 @@ export function CreateNewAgentPopUp() {
       <DialogTrigger asChild>
         <Button variant="ghost">
           <MdPostAdd className="mr-2 h-6 w-6" />
-          Create From Blank
+          Create Agent
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">

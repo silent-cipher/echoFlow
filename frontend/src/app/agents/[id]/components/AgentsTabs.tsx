@@ -226,7 +226,7 @@ export function AgentsTabs({ agent_id }: { agent_id: string }) {
     abi: agent.abi,
     address: agentDetails as `0x${string}`,
     functionName: "getMessageHistory",
-    args: [8],
+    args: [0],
   });
 
   // useEffect(() => {
