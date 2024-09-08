@@ -31,15 +31,23 @@ def get_tweet_sentiment_agent(tweet):
         "explanation": "The tweet contains positive sentiment because..."
     }}
     """
-    gemini_model = Gemini(api_key=API_KEY, model="models/gemini-1.5-flash", max_tokens=256)
-    response = gemini_model.chat([ChatMessage(role="user", content=prompt)])
-    print("Raw response:", response)
-    response = str(response)
-    #  assistant: ```json{}```
-    cleaned_response = response.strip()[18:-3].strip()
-    response = json.loads(cleaned_response)
-    return success_response({
-        "sentiment": response.get("sentiment"),
-        "keywords": response.get("keywords"),
-        "explanation": response.get("explanation")
-    })
+    try:
+        gemini_model = Gemini(api_key=API_KEY, model="models/gemini-1.5-flash", max_tokens=256)
+        response = gemini_model.chat([ChatMessage(role="user", content=prompt)])
+        print("Raw response:", response)
+        response = str(response)
+        #  assistant: ```json{}```
+        cleaned_response = response.strip()[18:-3].strip()
+        response = json.loads(cleaned_response)
+        return success_response({
+            "sentiment": response.get("sentiment"),
+            "keywords": response.get("keywords"),
+            "explanation": response.get("explanation")
+        })
+    except Exception as e:
+        print("Error:", e)
+        return failed_response({
+            "sentiment": "negative",
+            "keywords": ["HARM_CATEGORY_DANGEROUS_CONTENT" , "HARM_CATEGORY_HARASSMENT" , "HARM_CATEGORY_HATE_SPEECH" , "HARM_CATEGORY_SEXUALLY_EXPLICIT"],
+            "explanation": "The tweet contains negative sentiment because it may contains harmful content such as hate speech, harassment, and sexually explicit content."
+        })

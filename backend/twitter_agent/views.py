@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from .hooks.generate import get_generate_system_prompt
 from .utils import save_tweets, get_tweets , get_all_agents , create_new_agents , generate_new_tweet , generate_tweet_sentiment , get_all_tweets_by_agent_id
 
 @api_view(['GET'])
@@ -43,6 +44,12 @@ def getRoutes(request):
             'Endpoint': '/twitter_agent/get_all_tweets_by_agent_id/',
             'method': 'GET',
             'description': 'Get all tweets by agent id'
+        },
+        {
+            'Endpoint': '/twitter_agent/generate_system_prompt/',
+            'method': 'POST',
+            'body': 'tweet_id',
+            'description': 'Generate system prompt'
         }
     ]
     return Response(routes)
@@ -61,6 +68,11 @@ def Agents(request):
         return create_new_agents(request)
     elif request.method == 'GET':
         return get_all_agents()
+
+@api_view(['POST'])
+def Generate_system_prompt(request):
+    tweet_id = request.data['tweet_id']
+    return get_generate_system_prompt(tweet_id)
 
 @api_view(['POST'])
 def GenTweet(request):
