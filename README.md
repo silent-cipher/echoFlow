@@ -68,7 +68,7 @@ A decentralized AI app that extracts tweets via a Chrome extension, analyzes sen
    npm start
    ```
 
-   - (Backend):
+   - (Backend) is for tweet extraction and tweet id extraction:
 
    ```sh
    cd backend
@@ -98,7 +98,7 @@ Manually analyzing and generating tweets in a consistent tone or sentiment can b
 
 This app utilizes AI to transform Twitter data into personalized tweet content. It extracts tweets using a Chrome extension, analyzes sentiment with AI agents, and generates new tweets in the user’s unique style. By learning from historical tweets, it produces relevant, engaging content while offering detailed sentiment analysis. Built with Next.js, Django, and Galadriel, the app simplifies tweet generation and enhances user engagement by providing tailored tweet suggestions and insights into tweet sentiment.
 
-![Solution](./image/2.png)
+![Solution](./image/1.png)
 
 ## Approach
 
@@ -137,25 +137,26 @@ Here’s a detailed breakdown of the app’s features:
 
 ## Pages Overview
 
-1. **Home Page:**  
-   Set up AI agents using data extracted from tweets to tailor content generation and analysis. Manage and configure the agents to fit specific user needs and preferences.
-
-   ![Home](./image/3.png)
-
-2. **Tweet Generation Page:**  
-   Generate new tweets by entering prompts that guide the AI in creating content. Customize the output with specific headings, descriptions, hashtags, and tags.
-
-   ![Tweet](./image/4.png)
-
-3. **Sentiment Analysis Page:**  
-   Analyze individual tweets to determine their emotional tone and key phrases. Get detailed explanations and insights into the sentiment detected for each tweet.
-
-   ![Sentiment](./image/5.png)
-
-4. **Chrome Extension:**  
+1. **Chrome Extension:**  
    Extract tweets from Twitter based on user-defined criteria or ID. Automate data collection for analysis and generation tasks directly from the user's Twitter account.
 
-   ![Chrome](./image/6.png)
+   ![Chrome](./image/6.jpg)
+
+2. **Home Page:**  
+   Set up AI agents using data extracted from tweets to tailor content generation and analysis. Manage and configure the agents to fit specific user needs and preferences.
+
+   ![Home](./image/3.jpg)
+   ![Home](./image/2.jpg)
+
+3. **Tweet Generation Page:**  
+   Generate new tweets by entering prompts that guide the AI in creating content. Customize the output with specific headings, descriptions, hashtags, and tags.
+
+   ![Tweet](./image/4.jpg)
+
+4. **Sentiment Analysis Page:**  
+   Analyze individual tweets to determine their emotional tone and key phrases. Get detailed explanations and insights into the sentiment detected for each tweet.
+
+   ![Sentiment](./image/5.jpg)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
